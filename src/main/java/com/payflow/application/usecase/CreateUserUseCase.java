@@ -1,6 +1,5 @@
 package com.payflow.application.usecase;
 
-import com.payflow.api.dto.CreateUserRequest;
 import com.payflow.application.port.out.UserRepositoryPort;
 import com.payflow.domain.exception.DuplicateUserException;
 import com.payflow.domain.model.User;
@@ -17,20 +16,20 @@ public class CreateUserUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User execute(CreateUserRequest request) {
-        if (userRepository.existsByCpf(request.cpf())) {
-            throw new DuplicateUserException("CPF", request.cpf());
+    public User execute(CreateUserCommand command) {
+        if (userRepository.existsByCpf(command.cpf())) {
+            throw new DuplicateUserException("CPF", command.cpf());
         }
-        if (userRepository.existsByEmail(request.email())) {
-            throw new DuplicateUserException("email", request.email());
+        if (userRepository.existsByEmail(command.email())) {
+            throw new DuplicateUserException("email", command.email());
         }
 
         User user = User.builder()
-                .fullName(request.fullName())
-                .cpf(request.cpf())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .type(request.type())
+                .fullName(command.fullName())
+                .cpf(command.cpf())
+                .email(command.email())
+                .password(passwordEncoder.encode(command.password()))
+                .type(command.type())
                 .build();
 
         return userRepository.save(user);

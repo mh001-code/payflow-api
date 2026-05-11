@@ -2,6 +2,7 @@ package com.payflow.api.controller;
 
 import com.payflow.api.dto.CreateUserRequest;
 import com.payflow.api.dto.UserResponse;
+import com.payflow.application.usecase.CreateUserCommand;
 import com.payflow.application.usecase.CreateUserUseCase;
 import com.payflow.application.usecase.FindUserUseCase;
 import jakarta.validation.Valid;
@@ -20,7 +21,10 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid CreateUserRequest request) {
-        return UserResponse.from(createUserUseCase.execute(request));
+        CreateUserCommand command = new CreateUserCommand(
+                request.fullName(), request.cpf(), request.email(), request.password(), request.type()
+        );
+        return UserResponse.from(createUserUseCase.execute(command));
     }
 
     @GetMapping("/{id}")
