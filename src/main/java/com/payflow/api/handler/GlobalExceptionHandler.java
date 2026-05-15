@@ -4,6 +4,7 @@ import com.payflow.api.dto.ErrorResponse;
 import com.payflow.domain.exception.DuplicateUserException;
 import com.payflow.domain.exception.DuplicateWalletException;
 import com.payflow.domain.exception.InsufficientFundsException;
+import com.payflow.domain.exception.UnauthorizedTransactionException;
 import com.payflow.domain.exception.UserNotFoundException;
 import com.payflow.domain.exception.WalletNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -47,6 +48,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<ErrorResponse> handleInsufficientFunds(InsufficientFundsException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedTransactionException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedTransaction(UnauthorizedTransactionException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), ex.getMessage()));
     }
