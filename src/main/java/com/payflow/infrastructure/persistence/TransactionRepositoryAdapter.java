@@ -5,6 +5,7 @@ import com.payflow.domain.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -21,5 +22,10 @@ class TransactionRepositoryAdapter implements TransactionRepositoryPort {
     @Override
     public Optional<Transaction> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Transaction> findByUserId(Long userId) {
+        return repository.findByPayerUserIdOrPayeeUserId(userId, userId);
     }
 }

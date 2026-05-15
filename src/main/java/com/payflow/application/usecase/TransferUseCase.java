@@ -38,10 +38,10 @@ public class TransferUseCase {
         }
 
         Wallet payerWallet = walletRepository.findByUserId(command.payerId())
-                .orElseThrow(() -> new WalletNotFoundException(command.payerId()));
+                .orElseThrow(() -> new WalletNotFoundException("Wallet not found for user: " + command.payerId()));
 
         Wallet payeeWallet = walletRepository.findByUserId(command.payeeId())
-                .orElseThrow(() -> new WalletNotFoundException(command.payeeId()));
+                .orElseThrow(() -> new WalletNotFoundException("Wallet not found for user: " + command.payeeId()));
 
         if (payerWallet.getBalance().compareTo(command.amount()) < 0) {
             throw new InsufficientFundsException(payerWallet.getId());

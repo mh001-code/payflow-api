@@ -24,4 +24,15 @@ public record TransactionResponse(
                 transaction.getCreatedAt()
         );
     }
+
+    public static TransactionResponse from(Transaction transaction) {
+        return new TransactionResponse(
+                transaction.getId(),
+                transaction.getPayer().getUser().getId(),
+                transaction.getPayee().getUser().getId(),
+                transaction.getAmount(),
+                transaction.getStatus().name(),
+                transaction.getCreatedAt()
+        );
+    }
 }
